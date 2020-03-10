@@ -1,31 +1,29 @@
-from itertools import chain, combinations
-def powerset(iterable):
-    s = list(iterable)
-    return chain.from_iterable(combinations(s,r) for r in range(len(s)+1))
+def multi(n, k,r,a,b,c,d):
+    global minV, maxV
+    if n==k:
+        if maxV<r:
+            maxV = r
+        if minV>r:
+            minV = r
+    else:
+        if a>0:
+            multi(n+1, k, r+num[n], a-1,b,c,d)
 
-figure = ['+','-','/','*']
-num = int(input())
-n = list(map(int, input().split()))
-n2 = list(map(int, input().split()))
+        if b>0:
+            multi(n+1, k, r-num[n], a,b-1,c,d)
+        if c>0:
+            multi(n+1, k, r*num[n], a,b,c-1,d)
+        if d>0:
+            multi(n+1, k, int(r/num[n]), a,b,c,d-1)
+        
 
-multi = []
-dic = {}
-for i in range(len(figure)):
-    dic[figure[i]] = n[i]
-for key, value in dic.items():
-    for k in range(value):
-        multi.append(key)
-multi.append('')
-result = []
-for i in range(len(n2)):
-    result.append(n2[i])
-    result.append(multi[i])
+t= int(input())
+for t in range(1, t+1):
+    N = int(input())
+    a,b,c,d =map(int, input().split()) # 연산자의 개수 
+    num = list(map(int, input().split())) #수식에 사용되는 숫자
 
-multiresult = []
-multiresult.append(list(powerset(multi)))
-for i in multiresult:
-    for j in range(len(i)):
-        print(i[j])
-    
-
-
+    minV = 10000000000
+    maxV = -10000000000
+    multi(1,N, num[0], a,b,c,d )
+    print('#{} {}'.format(t, maxV-minV))
